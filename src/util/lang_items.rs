@@ -16,12 +16,3 @@
 #[cfg(all(not(test), not(feature = "test")))]
 use core::fmt::Arguments;
 
-#[cfg(all(not(test), not(feature = "test")))]
-#[lang="eh_personality"]
-extern fn eh_personality() {}
-
-#[cfg(all(not(test), not(feature = "test")))]
-#[lang="panic_fmt"]
-pub fn panic_fmt(_fmt: &Arguments, _file_line: &(&'static str, usize)) -> ! {
-  loop { }
-}

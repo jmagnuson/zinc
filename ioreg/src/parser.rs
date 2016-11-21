@@ -53,7 +53,7 @@ impl<'a, 'b> Parser<'a, 'b> {
   pub fn new(cx: &'a ExtCtxt<'b>, tts: &[TokenTree]) -> Parser<'a, 'b> {
     let sess = cx.parse_sess();
     let ttsvec = tts.iter().map(|x| (*x).clone()).collect();
-    let mut reader = lexer::new_tt_reader(&sess.span_diagnostic, None, None, ttsvec);
+    let mut reader = lexer::new_tt_reader(&sess.span_diagnostic, None, ttsvec);
 
     let tok0 = reader.next_token();
     let token = tok0.tok;

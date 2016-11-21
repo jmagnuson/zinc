@@ -65,7 +65,9 @@ pub fn get_ty_params_for_task(cx: &ExtCtxt, task: &str) -> Vec<String> {
 
 /// Inserts or replaces tasks vector
 fn set_tasks(cx: &mut ExtCtxt, tasks: Vec<ast::NestedMetaItem>) {
-  let mut vec_clone = cx.cfg();
+  let mut vec_clone = cx.cfg().clone();
+  let mut parse_clone = cx.parse_sess.clone();
+
   let maybe_pos = vec_clone.iter().position(|i| {
     match i.node {
       ast::MetaItemKind::List(ref k, _) if *k == TAG => true,
@@ -78,12 +80,13 @@ fn set_tasks(cx: &mut ExtCtxt, tasks: Vec<ast::NestedMetaItem>) {
   }
   vec_clone.push(cx.meta_list(DUMMY_SP, InternedString::new(TAG), tasks));
 
-  cx.cfg = vec_clone;
+  parse_clone.config = vec_clone;
+  cx.parse_sess = parse_clone;
 }
 
 /// Returns a vector of MetaLists where each MetaList corresponds to one task.
 fn get_tasks(cx: &ExtCtxt) -> Vec<ast::NestedMetaItem> {
-  for i in cx.cfg.iter() {
+  for i in cx.cfg().iter() {
     match i.node {
       ast::MetaItemKind::List(ref k, ref v) if *k == TAG => return v.clone(),
       _ => (),
